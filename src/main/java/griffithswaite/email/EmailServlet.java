@@ -26,12 +26,19 @@ public class EmailServlet extends HttpServlet {
     }
 
 	protected void doGet( HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    	response.getWriter().write("<html><body>Hello!</body></html>");
+//    	response.getWriter().write("<html><body>Hello!</body></html>");
     	
     	try {
     		Context initial = new InitialContext();
-			Session session = (Session) initial.lookup("java:/comp/env/mail/Session");
+			Session session = (Session) initial.lookup("java:comp/env/mail/Session");
 
+			NamingEnumeration<NameClassPair> list = initial.list("");
+			
+			String str = "";
+			while (list.hasMore()) {
+  				str += "<br>" + list.next().getName();
+			}
+			response.getWriter().write("<html><body>Hello! " + str + "</body></html>");
 			Message message = new MimeMessage(session);
 		   			
 			message.setRecipients(Message.RecipientType.TO,InternetAddress.parse("z@hotmail.co.uk"));
