@@ -1,0 +1,23 @@
+apply plugin: 'java'
+apply plugin: 'war'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	providedCompile 'javax.servlet:servlet-api:2.5'
+	compile 'javax.mail:mail:1.4'
+}
+
+task copyFilesToJetty(dependsOn: assemble, type : Copy) {
+    from 'build/libs'
+    into 'D:/Work/jetty/jetty-distribution-9.3.0.v20150612/webapps'
+    include '*.war'
+}
+
+task runJetty(dependsOn: copyFilesToJetty, type: JavaExec) {
+	main="-jar"
+	args 'start.jar'
+	workingDir 'D:/Work/jetty/jetty-distribution-9.3.0.v20150612'
+}
